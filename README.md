@@ -20,8 +20,7 @@ using Managed Service Identity (MSI) authentication.
 <a id="run"></a>
 ## Run this sample
 
-1. This sample is intended to be executed from inside a VM with MSI enabled. To create a VM with MSI enabled, please refer
-   this document (LINK TO DO).
+1. This sample is intended to be executed from inside a VM with MSI enabled. This document explains how to [create a VM with MSI enabled](https://github.com/Azure-Samples/compute-python-msi-vm).
 
 1. If you don't already have it, [install Python](https://www.python.org/downloads/) on that VM.
 
