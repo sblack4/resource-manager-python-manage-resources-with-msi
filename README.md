@@ -6,14 +6,20 @@ author: lmazuel
 
 # Use MSI to authenticate simply from inside a VM
 
-This sample explains how to use the SDK from inside an Azure resource like a VM, 
-using Managed Service Identity (MSI) authentication.
+This sample explains how to use the SDK from inside an Azure resource like a VM or a WebApp
+using Managed Service Identity (MSI) authentication. This sample covers the two types of MSI scenarios:
+
+- System Assigned Identity: the identity is created and assigned by ARM
+- User Assigned Identity: the identity is created and managed by the user, and assigned to a VM
+
+> User Assigned Identity is currently only available on VM/VMSS.
 
 **On this page**
 
 - [Run this sample](#run)
 - [What is example.py doing?](#example)
-    - [Create a MSI authentication instance](#create-credentials)
+    - [Create a System Assigned MSI authentication instance](#create-credentials-system)
+    - [Create a User Assigned MSI authentication instance](#create-credentials-user)
     - [Get the subscription ID of that token](#subscription_id)
     - [List resource groups](#list-groups)
 
@@ -63,13 +69,58 @@ Note that listing Resource Group is just an example, there is no actual limit of
 credentials (creating a KeyVault account, managing the Network of your VMs, etc.). The limit
 will be defined by the roles and policy assigned to the MSI token at the time of the creation of the VM.
 
-<a id="create-credentials"></a>
-### Create a MSI authentication instance
+<a id="create-credentials-system"></a>
+### Create a System Assigned MSI authentication instance
+
+Creating a `MSIAuthentication` instance using a System Assigned Identity does not require any parameter.
 
 ```python
 from msrestazure.azure_active_directory import MSIAuthentication
 
 credentials = MSIAuthentication()
+```
+
+<a id="create-credentials-user"></a>
+### Create a User Assigned MSI authentication instance
+
+You need to provide a reference to your User Assigned object in order to create an instance. You can provide a
+`client_id`, an `object_id` (Active Directory IDs) or the MSI resource id that
+must conform to: `/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/msiname`
+
+The fastest way to get a `client_id` is to use the CLI 2.0: `az identity show -g myR -n myMSi`
+
+You can get the `object_id` using the `az ad sp show --id <client_id>` command, or thougt the Azure Portal in the Active Directory section.
+
+You can also use the `azure-mgmt-msi` package.
+
+Creating the Authentication class is then:
+
+```python
+from msrestazure.azure_active_directory import MSIAuthentication
+
+credentials = MSIAuthentication(
+    client_id = '00000000-0000-0000-0000-000000000000'
+)
+```
+
+or
+
+```python
+from msrestazure.azure_active_directory import MSIAuthentication
+
+credentials = MSIAuthentication(
+    object_id = '00000000-0000-0000-0000-000000000000'
+)
+```
+
+or
+
+```python
+from msrestazure.azure_active_directory import MSIAuthentication
+
+credentials = MSIAuthentication(
+    msi_res_id = '/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/msiname'
+)
 ```
 
 <a id="subscription_id"></a>
