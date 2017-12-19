@@ -87,9 +87,9 @@ You need to provide a reference to your User Assigned object in order to create 
 `client_id`, an `object_id` (Active Directory IDs) or the MSI resource id that
 must conform to: `/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/msiname`
 
-The fatest way to get a `client_id` is to use the CLI 2.0: `az identity show -g myR -n myMSi`
+The fastest way to get a `client_id` is to use the CLI 2.0: `az identity show -g myR -n myMSi`
 
-You can get the `object_id` using the `az ad sp` command, or thougt the Azure Portal in the Active Directory section.
+You can get the `object_id` using the `az ad sp show --id <client_id>` command, or thougt the Azure Portal in the Active Directory section.
 
 You can also use the `azure-mgmt-msi` package.
 
