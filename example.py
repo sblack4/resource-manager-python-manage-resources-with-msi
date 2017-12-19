@@ -9,9 +9,30 @@ def run_example():
     """MSI Authentication example."""
 
     #
-    # Create MSI Authentication
+    # Create System Assigned MSI Authentication
     #
     credentials = MSIAuthentication()
+
+    #
+    # Create User Assigned MSI Authentication, using client_id
+    #
+    credentials = MSIAuthentication(
+        client_id = '00000000-0000-0000-0000-000000000000'
+    )
+
+    #
+    # Create User Assigned MSI Authentication, using object_id
+    #
+    credentials = MSIAuthentication(
+        object_id = '00000000-0000-0000-0000-000000000000'
+    )
+
+    #
+    # Create User Assigned MSI Authentication, using msi_res_id
+    #
+    credentials = MSIAuthentication(
+        msi_res_id = '/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/msiname'
+    )
 
     #
     # Create a Subscription client, and get the subscription ID attached to that credentials.

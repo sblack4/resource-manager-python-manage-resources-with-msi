@@ -7,13 +7,17 @@ author: lmazuel
 # Use MSI to authenticate simply from inside a VM
 
 This sample explains how to use the SDK from inside an Azure resource like a VM, 
-using Managed Service Identity (MSI) authentication.
+using Managed Service Identity (MSI) authentication. This sample covers the two types of MSI scenarios:
+
+- System Assigned Identity: the identity is created by ARM on VM creation
+- User Assigned Identity: the identity is created and managed by the user, and assigned during VM creation
 
 **On this page**
 
 - [Run this sample](#run)
 - [What is example.py doing?](#example)
-    - [Create a MSI authentication instance](#create-credentials)
+    - [Create a System Assigned MSI authentication instance](#create-credentials-system)
+    - [Create a User Assigned MSI authentication instance](#create-credentials-user)
     - [Get the subscription ID of that token](#subscription_id)
     - [List resource groups](#list-groups)
 
@@ -63,13 +67,52 @@ Note that listing Resource Group is just an example, there is no actual limit of
 credentials (creating a KeyVault account, managing the Network of your VMs, etc.). The limit
 will be defined by the roles and policy assigned to the MSI token at the time of the creation of the VM.
 
-<a id="create-credentials"></a>
-### Create a MSI authentication instance
+<a id="create-credentials-system"></a>
+### Create a System Assigned MSI authentication instance
+
+Creating a `MSIAuthentication` instance using a System Assigned Identity does not required any parameter.
 
 ```python
 from msrestazure.azure_active_directory import MSIAuthentication
 
 credentials = MSIAuthentication()
+```
+
+<a id="create-credentials-user"></a>
+### Create a User Assigned MSI authentication instance
+
+You need to provide a reference to your User Assigned object in order to create an instance. There is possibilities:
+
+- client_id: You can find this information on the portal under AD, in the App created for the User Assigned MSI.
+- object_id: You can find this information on the portal under AD, in the App created for the User Assigned MSI.
+- msi_res_id: The ARM resource id. Must looks like: `/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/msiname`
+
+```python
+from msrestazure.azure_active_directory import MSIAuthentication
+
+credentials = MSIAuthentication(
+    client_id = '00000000-0000-0000-0000-000000000000'
+)
+```
+
+or
+
+```python
+from msrestazure.azure_active_directory import MSIAuthentication
+
+credentials = MSIAuthentication(
+    object_id = '00000000-0000-0000-0000-000000000000'
+)
+```
+
+or
+
+```python
+from msrestazure.azure_active_directory import MSIAuthentication
+
+credentials = MSIAuthentication(
+    msi_res_id = '/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/msiname'
+)
 ```
 
 <a id="subscription_id"></a>
