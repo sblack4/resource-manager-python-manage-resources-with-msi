@@ -6,11 +6,13 @@ author: lmazuel
 
 # Use MSI to authenticate simply from inside a VM
 
-This sample explains how to use the SDK from inside an Azure resource like a VM, 
+This sample explains how to use the SDK from inside an Azure resource like a VM or a WebApp
 using Managed Service Identity (MSI) authentication. This sample covers the two types of MSI scenarios:
 
-- System Assigned Identity: the identity is created by ARM on VM creation
-- User Assigned Identity: the identity is created and managed by the user, and assigned during VM creation
+- System Assigned Identity: the identity is created and assigned by ARM
+- User Assigned Identity: the identity is created and managed by the user, and assigned to a VM
+
+> User Assigned Identity is currently only available on VM/VMSS.
 
 **On this page**
 
@@ -81,11 +83,17 @@ credentials = MSIAuthentication()
 <a id="create-credentials-user"></a>
 ### Create a User Assigned MSI authentication instance
 
-You need to provide a reference to your User Assigned object in order to create an instance. There is possibilities:
+You need to provide a reference to your User Assigned object in order to create an instance. You can provide a
+`client_id`, an `object_id` (Active Directory IDs) or the MSI resource id that
+must conform to: `/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/msiname`
 
-- client_id: You can find this information on the portal under AD, in the App created for the User Assigned MSI.
-- object_id: You can find this information on the portal under AD, in the App created for the User Assigned MSI.
-- msi_res_id: The ARM resource id. Must conform to: `/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/msiname`
+The fatest way to get a `client_id` is to use the CLI 2.0: `az identity show -g myR -n myMSi`
+
+You can get the `object_id` using the `az ad sp` command, or thougt the Azure Portal in the Active Directory section.
+
+You can also use the `azure-mgmt-msi` package.
+
+Creating the Authentication class is then:
 
 ```python
 from msrestazure.azure_active_directory import MSIAuthentication
