@@ -70,7 +70,7 @@ will be defined by the roles and policy assigned to the MSI token at the time of
 <a id="create-credentials-system"></a>
 ### Create a System Assigned MSI authentication instance
 
-Creating a `MSIAuthentication` instance using a System Assigned Identity does not required any parameter.
+Creating a `MSIAuthentication` instance using a System Assigned Identity does not require any parameter.
 
 ```python
 from msrestazure.azure_active_directory import MSIAuthentication
@@ -85,7 +85,7 @@ You need to provide a reference to your User Assigned object in order to create 
 
 - client_id: You can find this information on the portal under AD, in the App created for the User Assigned MSI.
 - object_id: You can find this information on the portal under AD, in the App created for the User Assigned MSI.
-- msi_res_id: The ARM resource id. Must looks like: `/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/msiname`
+- msi_res_id: The ARM resource id. Must conform to: `/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/msiname`
 
 ```python
 from msrestazure.azure_active_directory import MSIAuthentication
