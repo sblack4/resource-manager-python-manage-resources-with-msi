@@ -1,7 +1,12 @@
 ---
-services: azure-resource-manager
-platforms: python
-author: lmazuel
+page_type: sample
+languages:
+- python
+products:
+- azure
+description: "This sample explains how to use the SDK from inside an Azure resource like a VM or a WebApp
+using Managed Service Identity (MSI) authentication."
+urlFragment: resource-manager-python-manage-resources-with-msi
 ---
 
 # Use MSI to authenticate simply from inside a VM
